@@ -1,27 +1,43 @@
 use bevy::{
+    ecs::system::SystemParam,
     image::{ImageLoaderSettings, ImageSampler},
     prelude::*,
 };
 
 use crate::asset_tracking::LoadResource;
 
+#[derive(SystemParam)]
+pub struct Store<'w> {
+    pub assets: Res<'w, DemoAssets>,
+    pub texture_atlas_layouts: ResMut<'w, Assets<TextureAtlasLayout>>,
+}
+
+impl<'w> Store<'w> {
+    pub(super) fn plugin(app: &mut App) {
+        app.register_type::<DemoAssets>();
+        app.load_resource::<DemoAssets>();
+    }
+
+    pub fn is_ready(
+        assets: Option<Res<DemoAssets>>,
+        texture_atlas: Option<Res<Assets<TextureAtlasLayout>>>,
+    ) -> bool {
+        assets.is_some() && texture_atlas.is_some()
+    }
+}
+
 #[derive(Resource, Asset, Clone, Reflect)]
 #[reflect(Resource)]
-pub struct Assets {
+pub struct DemoAssets {
     #[dependency]
-    ducky: Handle<Image>,
+    pub ducky: Handle<Image>,
     #[dependency]
     pub steps: Vec<Handle<AudioSource>>,
     #[dependency]
-    music: Handle<AudioSource>,
+    pub music: Handle<AudioSource>,
 }
-impl Assets {
-    pub(super) fn plugin(app: &mut App) {
-        app.register_type::<Assets>();
-        app.load_resource::<Assets>();
-    }
-}
-impl FromWorld for Assets {
+
+impl FromWorld for DemoAssets {
     fn from_world(world: &mut World) -> Self {
         let assets = world.resource::<AssetServer>();
         Self {

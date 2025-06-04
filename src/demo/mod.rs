@@ -5,20 +5,19 @@
 
 use bevy::prelude::*;
 
-use crate::demo::{animation::PlayerAnimation, level::Level, player::Player};
+use crate::demo::{animation::PlayerAnimation, player::Player, store::Store};
 
 mod animation;
-mod assets;
 pub mod level;
 mod movement;
 pub mod player;
+pub mod store;
 
 pub(super) fn plugin(app: &mut App) {
     app.add_plugins((
         PlayerAnimation::plugin,
-        Level::plugin,
         movement::plugin,
         Player::plugin,
-        Assets::plugin,
+        Store::plugin,
     ));
 }

@@ -11,7 +11,10 @@ use std::time::Duration;
 use crate::{
     AppSystems, PausableSystems,
     audio::sound_effect,
-    demo::{movement::MovementController, player::PlayerAssets},
+    demo::{
+        movement::MovementController,
+        store::{DemoAssets, Store},
+    },
 };
 
 /// Component that tracks player's animation state.
@@ -40,7 +43,7 @@ impl PlayerAnimation {
                 Self::timer_driver.in_set(AppSystems::TickTimers),
                 (Self::driver, Self::atlas_driver, Self::step_sound_driver)
                     .chain()
-                    .run_if(resource_exists::<PlayerAssets>)
+                    .run_if(Store::is_ready)
                     .in_set(AppSystems::Update),
             )
                 .in_set(PausableSystems),
@@ -87,7 +90,7 @@ impl PlayerAnimation {
     /// animation.
     fn step_sound_driver(
         mut commands: Commands,
-        player_assets: Res<PlayerAssets>,
+        player_assets: Res<DemoAssets>,
         mut step_query: Query<&Self>,
     ) {
         for animation in &mut step_query {
