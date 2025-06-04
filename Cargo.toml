@@ -10,6 +10,7 @@ bevy_embedded_assets = { version = "0.13.0" }       # match bevy
 bevy_console = { version = "0.14" }                 # match bevy
 clap = { version = "4.5", features = ["derive"] }   # match bevy_console
 bevy_egui = "0.34"                                  # match bevy_console
+bevy-inspector-egui = "0.31.0"                      # match bevy_egui
 
 # Compile low-severity logs out of native builds for performance.
 log = { version = "0.4", features = [

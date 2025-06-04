@@ -29,6 +29,9 @@ pub fn ui_root(name: impl Into<Cow<'static, str>>) -> impl Bundle {
     )
 }
 
+#[derive(Component)]
+pub struct Toggle;
+
 /// A simple header label. Bigger than [`label`].
 pub fn header(text: impl Into<String>) -> impl Bundle {
     (
@@ -104,9 +107,9 @@ where
     I: IntoObserverSystem<E, B, M>,
 {
     let text = text.into();
+
     let action = IntoObserverSystem::into_system(action);
     (
-        Name::new("Button"),
         Node::default(),
         Children::spawn(SpawnWith(|parent: &mut ChildSpawner| {
             parent
