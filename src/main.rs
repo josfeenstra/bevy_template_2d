@@ -5,16 +5,17 @@
 
 mod asset_tracking;
 mod audio;
+use bevy_console::make_layer;
 #[cfg(not(feature = "dev"))]
 use bevy_embedded_assets::EmbeddedAssetPlugin;
+mod console;
 mod demo;
-#[cfg(feature = "dev")]
-mod dev_tools;
 mod menus;
 mod screens;
 mod theme;
 
-use bevy::{asset::AssetMetaCheck, prelude::*};
+use bevy::{asset::AssetMetaCheck, log::LogPlugin, prelude::*};
+use tracing::Level;
 
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()
@@ -42,6 +43,12 @@ impl Plugin for AppPlugin {
                     }
                     .into(),
                     ..default()
+                })
+                .set(LogPlugin {
+                    // override bevy stuff
+                    level: Level::INFO,
+                    filter: "error,capture_bevy_logs=info".to_owned(),
+                    custom_layer: make_layer,
                 }),
             #[cfg(not(feature = "dev"))]
             EmbeddedAssetPlugin::default(),
@@ -52,8 +59,7 @@ impl Plugin for AppPlugin {
             asset_tracking::plugin,
             audio::plugin,
             demo::plugin,
-            #[cfg(feature = "dev")]
-            dev_tools::plugin,
+            console::plugin,
             menus::plugin,
             screens::plugin,
             theme::plugin,

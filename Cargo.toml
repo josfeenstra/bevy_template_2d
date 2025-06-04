@@ -6,9 +6,11 @@ edition = "2024"
 
 [dependencies]
 bevy = { version = "0.16", features = ["wayland"] }
-bevy_embedded_assets = { version = "0.13.0" }
+bevy_embedded_assets = { version = "0.13.0" }       # match bevy
+bevy_console = { version = "0.14" }                 # match bevy
+clap = { version = "4.5", features = ["derive"] }   # match bevy_console
+bevy_egui = "0.34"                                  # match bevy_console
 
-rand = "0.8"
 # Compile low-severity logs out of native builds for performance.
 log = { version = "0.4", features = [
     "max_level_debug",
@@ -19,6 +21,8 @@ tracing = { version = "0.1", features = [
     "max_level_debug",
     "release_max_level_warn",
 ] }
+
+rand = "0.8"
 
 # Your web builds will start failing if you add a dependency that pulls in `getrandom` v0.3+.
 # To fix this, you should tell `getrandom` to use the `wasm_js` backend on Wasm.
