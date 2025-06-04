@@ -5,6 +5,8 @@
 
 mod asset_tracking;
 mod audio;
+#[cfg(not(feature = "dev"))]
+use bevy_embedded_assets::EmbeddedAssetPlugin;
 mod demo;
 #[cfg(feature = "dev")]
 mod dev_tools;
@@ -13,7 +15,6 @@ mod screens;
 mod theme;
 
 use bevy::{asset::AssetMetaCheck, prelude::*};
-use bevy_embedded_assets::EmbeddedAssetPlugin;
 
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()
@@ -42,6 +43,7 @@ impl Plugin for AppPlugin {
                     .into(),
                     ..default()
                 }),
+            #[cfg(not(feature = "dev"))]
             EmbeddedAssetPlugin::default(),
         ));
 
