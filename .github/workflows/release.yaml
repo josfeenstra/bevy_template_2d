@@ -24,7 +24,8 @@ env:
   cargo_build_binary_name: template-2d
 
   # The path to the assets directory.
-  assets_path: assets
+  # [JF]: I've turned this off / to a nonsense value because I want to embed all assets in the binary.
+  assets_path: ass
 
   # Whether to build and package a release for a given target platform.
   build_for_web: true
