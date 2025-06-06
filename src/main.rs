@@ -17,6 +17,8 @@ mod theme;
 use bevy::{asset::AssetMetaCheck, log::LogPlugin, prelude::*};
 use tracing::Level;
 
+use bevy::color::Color;
+
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()
 }
