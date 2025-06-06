@@ -22,7 +22,7 @@ pub(super) fn plugin(app: &mut App) {
 pub struct Console<'w> {
     print_line_event: EventWriter<'w, PrintConsoleLine>,
 }
-impl<'w> Console<'_> {
+impl<'w> Console<'w> {
     pub fn log(&mut self, line: impl Into<String>) {
         self.print_line_event
             .write(PrintConsoleLine::new(line.into()));
