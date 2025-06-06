@@ -8,7 +8,7 @@ mod audio;
 use bevy_console::make_layer;
 #[cfg(feature = "embed_all_assets")]
 use bevy_embedded_assets::{EmbeddedAssetPlugin, PluginMode};
-mod console;
+mod debug;
 mod demo;
 mod menus;
 mod screens;
@@ -61,7 +61,7 @@ impl Plugin for AppPlugin {
             asset_tracking::plugin,
             audio::plugin,
             demo::plugin,
-            console::plugin,
+            debug::plugin,
             menus::plugin,
             screens::plugin,
             theme::plugin,

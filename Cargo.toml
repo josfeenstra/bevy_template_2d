@@ -1,7 +1,7 @@
 [package]
 name = "template-2d"
 authors = ["Jos Feenstra <me@josfeenstra.nl>"]
-version = "0.1.0"
+version = "0.0.3"
 edition = "2024"
 
 [dependencies]
@@ -39,7 +39,7 @@ rand = "0.8"
 
 [features]
 # Default to a native dev build.
-default = ["release"]
+default = ["dev_native"]
 release = ["embed_all_assets"]
 dev_native = [
     "dev",
