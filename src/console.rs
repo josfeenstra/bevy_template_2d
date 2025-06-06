@@ -1,10 +1,13 @@
 //! Development tools for the game. This plugin is only enabled in dev builds.
 
 use crate::screens::Screen;
-use bevy::{
-    dev_tools::states::log_transitions, ecs::system::SystemParam,
-    input::common_conditions::input_just_pressed, prelude::*, ui::UiDebugOptions,
-};
+
+#[cfg(feature = "dev")]
+use bevy::dev_tools::states::log_transitions;
+#[cfg(feature = "dev")]
+use bevy::ui::UiDebugOptions;
+
+use bevy::{ecs::system::SystemParam, input::common_conditions::input_just_pressed, prelude::*};
 use bevy_console::{
     AddConsoleCommand, ConsoleCommand, ConsoleCommandEntered, ConsoleConfiguration, ConsolePlugin,
     ConsoleSet, PrintConsoleLine, reply,
@@ -12,24 +15,25 @@ use bevy_console::{
 use bevy_egui::egui::Color32;
 use clap::Parser;
 
+const TOGGLE_KEY: KeyCode = KeyCode::F1;
+const PADDING: f32 = 50.0;
+
 pub(super) fn plugin(app: &mut App) {
     app.add_plugins(Console::plugin);
 
     // Log `Screen` state transitions.
-    #[cfg(feature = "dev")]
-    app.add_systems(Update, log_transitions::<Screen>);
-
     // Toggle the debug overlay for UI.
     #[cfg(feature = "dev")]
     app.add_systems(
         Update,
-        toggle_debug_ui.run_if(input_just_pressed(TOGGLE_KEY)),
+        (
+            log_transitions::<Screen>,
+            toggle_debug_ui.run_if(input_just_pressed(TOGGLE_KEY)),
+        ),
     );
 }
 
-const TOGGLE_KEY: KeyCode = KeyCode::F1;
-const PADDING: f32 = 50.0;
-
+#[cfg(feature = "dev")]
 fn toggle_debug_ui(mut options: ResMut<UiDebugOptions>) {
     options.toggle();
 }

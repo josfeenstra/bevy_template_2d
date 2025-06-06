@@ -6,8 +6,8 @@
 mod asset_tracking;
 mod audio;
 use bevy_console::make_layer;
-#[cfg(not(feature = "dev"))]
-use bevy_embedded_assets::EmbeddedAssetPlugin;
+#[cfg(feature = "embed_all_assets")]
+use bevy_embedded_assets::{EmbeddedAssetPlugin, PluginMode};
 mod console;
 mod demo;
 mod menus;
@@ -27,6 +27,10 @@ impl Plugin for AppPlugin {
     fn build(&self, app: &mut App) {
         // Add Bevy plugins.
         app.add_plugins((
+            #[cfg(feature = "embed_all_assets")]
+            EmbeddedAssetPlugin {
+                mode: PluginMode::ReplaceDefault,
+            },
             DefaultPlugins
                 .set(AssetPlugin {
                     // Wasm builds will check for meta files (that don't exist) if this isn't set.
@@ -50,8 +54,6 @@ impl Plugin for AppPlugin {
                     filter: "error,capture_bevy_logs=info".to_owned(),
                     custom_layer: make_layer,
                 }),
-            #[cfg(not(feature = "dev"))]
-            EmbeddedAssetPlugin::default(),
         ));
 
         // Add other plugins.
