@@ -2,8 +2,8 @@
 
 use bevy::{ecs::system::SystemParam, prelude::*};
 use bevy_console::{
-    AddConsoleCommand, ConsoleCommand, ConsoleCommandEntered, ConsoleConfiguration, ConsolePlugin,
-    ConsoleSet, PrintConsoleLine, reply,
+    AddConsoleCommand, ConsoleCommand, ConsoleCommandEntered, ConsoleConfiguration, ConsoleOpen,
+    ConsolePlugin, ConsoleSet, PrintConsoleLine, reply,
 };
 use bevy_egui::egui::Color32;
 use clap::Parser;
@@ -101,7 +101,7 @@ impl<'w> Console<'w> {
     ) -> Result {
         let window = query.single()?;
         config.width = window.width() - PADDING * 2.0;
-        config.height = window.height() - PADDING * 2.0;
+        config.height = window.height() * 2.0 - PADDING * 2.0;
         Ok(())
     }
 
@@ -132,4 +132,11 @@ impl LogCommand {
             // log.ok();
         }
     }
+}
+
+pub fn is_console_open(console_open: Res<ConsoleOpen>) -> bool {
+    if console_open.open {
+        println!("Console is open");
+    }
+    console_open.open
 }
