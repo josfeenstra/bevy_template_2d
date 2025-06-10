@@ -2,8 +2,8 @@
 
 use bevy::{ecs::system::SystemParam, prelude::*};
 use bevy_console::{
-    AddConsoleCommand, ConsoleCommand, ConsoleCommandEntered, ConsoleConfiguration, ConsoleOpen,
-    ConsolePlugin, ConsoleSet, PrintConsoleLine, reply,
+    AddConsoleCommand, ConsoleCommand, ConsoleCommandEntered, ConsoleConfiguration, ConsolePlugin,
+    ConsoleSet, PrintConsoleLine, reply,
 };
 use bevy_egui::egui::Color32;
 use clap::Parser;
@@ -27,27 +27,6 @@ impl<'w> Console<'w> {
         self.print_line_event
             .write(PrintConsoleLine::new(line.into()));
     }
-
-    // pub fn error(&mut self, line: impl Into<String>) {
-    //     // log::info!("Hi!");
-    //     // log::warn!("This is a warning!");
-    //     // log::debug!("You won't see me!");
-    //     // log::error!("This is an error!");
-    //     // log::info!("Bye!");
-    // }
-
-    // pub fn info(&mut self, line: impl Into<String>) {
-    //     // log::info!("Hi!");
-    //     // log::warn!("This is a warning!");
-    //     // log::debug!("You won't see me!");
-    //     // log::error!("This is an error!");
-    //     // log::info!("Bye!");
-    // }
-
-    // pub fn warn(&mut self, line: impl Into<String>) {
-    //     // log::info!("Hi!");
-    //     // log::warn!(&line);
-    // }
 }
 impl<'w> Console<'w> {
     pub fn plugin(app: &mut App) {
@@ -132,11 +111,4 @@ impl LogCommand {
             // log.ok();
         }
     }
-}
-
-pub fn is_console_open(console_open: Res<ConsoleOpen>) -> bool {
-    if console_open.open {
-        println!("Console is open");
-    }
-    console_open.open
 }

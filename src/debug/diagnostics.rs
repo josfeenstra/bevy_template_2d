@@ -1,15 +1,12 @@
 use bevy::{
     diagnostic::{
-        DiagnosticsPlugin, DiagnosticsStore, EntityCountDiagnosticsPlugin,
-        FrameTimeDiagnosticsPlugin, SystemInformationDiagnosticsPlugin,
+        DiagnosticsStore, EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin,
+        SystemInformationDiagnosticsPlugin,
     },
-    input::keyboard::KeyboardInput,
     prelude::*,
     render::diagnostic::RenderDiagnosticsPlugin,
 };
 use bevy_console::ConsoleSet;
-
-use crate::debug::console::is_console_open;
 
 #[derive(Component)]
 struct DiagnosticsDisplay;
@@ -22,6 +19,9 @@ struct EntityCountText;
 
 #[derive(Component)]
 struct MemoryText;
+
+#[derive(Component)]
+struct RenderText;
 
 // add some state to the app to toggle the diagnostics
 #[derive(States, Default, Clone, Eq, PartialEq, Hash, Debug)]
@@ -63,7 +63,7 @@ impl DiagnosticsUi {
         input: Res<ButtonInput<KeyCode>>,
         mut next_game_state: ResMut<NextState<DiagnosticsState>>,
     ) {
-        if input.just_pressed(KeyCode::F1) {
+        if input.just_pressed(KeyCode::F2) {
             let new_state = if *state == DiagnosticsState::Enabled {
                 DiagnosticsState::Disabled
             } else {
@@ -131,7 +131,7 @@ impl DiagnosticsUi {
                     ..default()
                 },
                 TextColor(Color::srgb(1.0, 0.8, 0.2)), // Yellow
-                MemoryText,
+                RenderText,
             ));
         });
     }
@@ -152,7 +152,12 @@ impl DiagnosticsUi {
         >,
         mut render_query: Query<
             &mut Text,
-            (With<MemoryText>, Without<FpsText>, Without<EntityCountText>),
+            (
+                With<RenderText>,
+                Without<FpsText>,
+                Without<EntityCountText>,
+                Without<MemoryText>,
+            ),
         >,
     ) {
         // Update FPS
@@ -187,6 +192,24 @@ impl DiagnosticsUi {
             } else {
                 **text = "Memory: N/A".to_string();
             }
+        }
+
+        // Update Render Text - access render diagnostics from DiagnosticsStore
+        if let Ok(mut _text) = render_query.single_mut() {
+            // // Try to get render-related diagnostics from RenderDiagnosticsPlugin
+            // // The exact diagnostic key depends on what's available
+            // if let Some(render_diagnostic) = diagnostics
+            //     .iter()
+            //     .find(|diag| diag.name().contains("render") || diag.name().contains("gpu"))
+            // {
+            //     if let Some(render_time) = render_diagnostic.smoothed() {
+            //         **text = format!("Render: {:.2} ms", render_time);
+            //     } else {
+            //         **text = "Render: N/A".to_string();
+            //     }
+            // } else {
+            //     **text = "Render: No Data".to_string();
+            // }
         }
     }
 }
